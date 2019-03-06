@@ -3,22 +3,29 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <string.h>
+
+#define PATH "./texts/"
 
 int *open_files(int num, char **file_names) {
+
 	printf("test\n");
 	int *fdlist = calloc(num, sizeof(int));
 	for (int i = 0; i < num; ++i) {
-		if ((fdlist[i] = open(file_names[i], O_RDONLY)) == -1) {
+		char file_path[256] = PATH;
+		strcat(file_path, file_names[i]);
+		if ((fdlist[i] = open(file_path, O_RDONLY)) == -1) {
 			return NULL;
 		}
 	}
 	return fdlist;
 }
 
-int read_files(int *fdlist, char *buffer[6]) {
-	read(fdlist[0], *buffer, 6);
-	return 0;
-}
+// char *read_files(int *fdlist) {
+//  char cur;
+//  read(fdlist[0], &cur, 1);
+//  return 0;
+// }
 
 
 /*
@@ -43,15 +50,19 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	default:
 		printf("test %i\n", argc - 1);
-		foo = open_files(argc - 1, argv + 1);
-		// read(*foo, bar, 6);
-		read_files(foo, &bar);
+		if ((foo = open_files(argc - 1, argv + 1)) == NULL) {
+			printf("fail\n");
+			exit(EXIT_FAILURE);
+		}
+		read(*foo, bar, 6);
+		// read_files(foo, &bar);
+		// read(open("./texts/beemovie.txt", O_RDONLY), bar, 6);
 		// run
 	}
-	for (int i = 0; i < argc-1; ++i) {
-		printf("%i \n", foo + i);
-	}
-	printf("%s \n", bar);
+	// for (int i = 0; i < argc-1; ++i) {
+	//  printf("%i \n", foo + i);
+	// }
+	printf("text: %s \n", bar);
 	// Sanitize inputs
 
 	return 0;

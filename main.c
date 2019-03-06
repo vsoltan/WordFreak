@@ -7,6 +7,8 @@
 
 #define PATH "./texts/"
 
+// takes an array file names, and the number of files and opens those files in the directory specified by the constant PATH
+// returns an array containing the file descriptors for every file specified
 int *open_files(int num, char **file_names) {
 
 	printf("test\n");
@@ -37,7 +39,7 @@ int *open_files(int num, char **file_names) {
  *  - Sanitize input
  *  - Iterate over input
  *  - Count each occurence of each word
- *     - Manage each occurence in a dictionary?
+ *     - Manage each occurence in a hashmap
  */
 int main(int argc, char *argv[]) {
 	int *foo;

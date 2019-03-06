@@ -27,22 +27,8 @@ int get_hash(char *key) {
 	return hash % HASH_SIZE;
 }
 
-char *copy_string(char *c1) {
-	// need to free later
-	char *c2 = (char *) malloc(strlen(c1) * sizeof(char) + 1);
-	if(c2 == NULL) {
-		printf("could not malloc c2\n");
-		exit(EXIT_FAILURE);
-	}
-
-	strcpy(c2, c1);
-
-	return c2;
-}
-
-
-// TODO: implement dictionary methods
-
+// gets the entry in the dictionary that corresponds to the passed value,
+// returns a pointer to the that entry
 HM_Entry *get_entry(char *key) {
 	for(HM_Entry *entry = hashmap[get_hash(key)]; entry != NULL; entry = entry->next) {
 		if(strcmp(key, entry->key) == 0) {
@@ -54,13 +40,16 @@ HM_Entry *get_entry(char *key) {
 	return NULL;
 }
 
+// enters the key and value into the dictionary,
+// if the key doesn't exist, then create a new entry
+// if the key already exists, then replace it's current value with the passed value
 HM_Entry *set_entry(char *key, int *value) {
 	HM_Entry *entry = get_entry(key);
 	int hash = get_hash(key);
 
-	// entry not found
+	// if the entry not found
 	if(entry == NULL) {
-		// add entry to hashmap
+		// then create a new entry
 		entry = malloc(sizeof(HM_Entry));
 
 		// could not malloc
@@ -72,10 +61,12 @@ HM_Entry *set_entry(char *key, int *value) {
 		hashmap[hash] = entry;
 
 	} else {
-		// if entry already exists free the value
+		// if entry already exists, then free the old value so it can be updated
 		free(entry->value);
 	}
 
+	// duplicates the value 
+	// don't want the entry to have a pointer to what was passed to maintain encapsulation
 	int *value_copy = malloc(sizeof(int));
 	if(value_copy == NULL) {
 		printf("could not malloc value_copy\n");
@@ -84,6 +75,7 @@ HM_Entry *set_entry(char *key, int *value) {
 
 	*value_copy = *value;
 
+	// assigns new/updated value
 	entry->value = value_copy;
 
 	return entry;

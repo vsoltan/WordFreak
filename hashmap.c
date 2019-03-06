@@ -1,11 +1,11 @@
 
-#include "dictionary.h"
+#include "hashmap.h"
 
 //increase HASH_SIZE to reduce collision in the dicttionary
 #define HASH_SIZE 64
 
 //static implementation of the dictionary
-static Dictionary_Entry *dictionary[HASH_SIZE];
+static HM_Entry *hashmap[HASH_SIZE];
 
 //TODO: implement dictionary methods
 

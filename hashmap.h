@@ -3,11 +3,11 @@
 //*note I use the term dictionary to referr to the data structure that's also known as a hash map
 //has values for the entry's name/key, and the associated value
 //only works when the name is a "string" and the value is an int, as that is what's necessary for this project
-typedef struct dictionary_entry {
-    struct dictionary_entry *next;
+typedef struct hm_entry {
+    struct hm_entry *next;
     char *key;
     int *value;
-} Dictionary_Entry;
+} HM_Entry;
 
 //calculates the hash value of a provided string
 int *get_hash(char *c);

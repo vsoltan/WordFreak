@@ -1,6 +1,8 @@
 
 #include "hashmap.h"
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 // increase HASH_SIZE to reduce collision in the dicttionary
 // should be a prime number
@@ -17,7 +19,7 @@ int get_hash(char *key) {
 
 	int hash = 0;
 
-	for(char *c = key; c* != '\0'; ++c) {
+	for(char *c = key; *c != '\0'; ++c) {
 		hash = (hash * a) + (*c);
 		a *= b;
 	}
@@ -27,7 +29,7 @@ int get_hash(char *key) {
 
 char *copy_string(char *c1) {
 	// need to free later
-	char *c2 = malloc(strlen(c1) * sizeof(char) + 1);
+	char *c2 = (char *) malloc(strlen(c1) * sizeof(char) + 1);
 	if(c2 == NULL) {
 		printf("could not malloc c2\n");
 		exit(EXIT_FAILURE);
@@ -41,9 +43,9 @@ char *copy_string(char *c1) {
 
 // TODO: implement dictionary methods
 
-Dictionary_Entry *get_entry(char *key) {
-	for(HM_Entry *entry = hashmap(get_hash(key)); entry != NULL; entry = entry->next) {
-		if(strcmp(key, entry->name) == 0) {
+HM_Entry *get_entry(char *key) {
+	for(HM_Entry *entry = hashmap[get_hash(key)]; entry != NULL; entry = entry->next) {
+		if(strcmp(key, entry->key) == 0) {
 			return entry;
 		}
 	}
@@ -52,7 +54,7 @@ Dictionary_Entry *get_entry(char *key) {
 	return NULL;
 }
 
-Dictionary_Entry *set_entry(char *key, int *value) {
+HM_Entry *set_entry(char *key, int *value) {
 	HM_Entry *entry = get_entry(key);
 	int hash = get_hash(key);
 
@@ -74,13 +76,13 @@ Dictionary_Entry *set_entry(char *key, int *value) {
 		free(entry->value);
 	}
 
-	char *value_copy = malloc(strlen(c1) * sizeof(char) + 1);
+	int *value_copy = malloc(sizeof(int));
 	if(value_copy == NULL) {
 		printf("could not malloc value_copy\n");
 		exit(EXIT_FAILURE);
 	}
 
-	strcpy(value_copy, value);
+	*value_copy = *value;
 
 	entry->value = value_copy;
 

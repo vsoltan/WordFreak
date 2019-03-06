@@ -1,6 +1,5 @@
 
-//struct that models an entry in a dictionary
-//*note I use the term dictionary to referr to the data structure that's also known as a hash map
+//struct that models an entry in a hashmap
 //has values for the entry's name/key, and the associated value
 //only works when the name is a "string" and the value is an int, as that is what's necessary for this project
 typedef struct hm_entry {

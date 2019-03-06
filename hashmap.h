@@ -12,6 +12,8 @@ typedef struct hm_entry {
 //calculates the hash value of a provided string
 int *get_hash(char *c);
 
+char *copy_string(char *c1);
+
 //gets the entry in the dictionary that corresponds to the passed value, returns a pointer to the entry
 struct dictionary_entry *get_entry(char *key);
 

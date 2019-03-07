@@ -4,10 +4,11 @@ OBJ = main.o hashmap.o
 PROG = wordfreak
 DEPS = hashmap.h
 
-$(PROG): $(OBJ)
-	gcc $(OBJ) -o $(PROG)
+%.o: %.c $(DEPS)
+	gcc -c -o $@ $<
 
-$(OBJ): $(SRC)
-hashmap.o : hashmap.h
+$(PROG): $(OBJ)
+	gcc -o $(PROG) $(OBJ)
+#hashmap.o : $(DEPS)
 
 #-include $(DEPS)

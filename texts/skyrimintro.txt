@@ -1,6 +1,3 @@
-[Skyrim opens with an Imperial wagon driving four prisoners down a snowy
-mountain pass. All are seated and bound; the one dressed in finery is gagged.]
-
 Ralof: Hey, you. You're finally awake. You were trying to cross the border,
 right? Walked right into that Imperial ambush, same as us, and that
 thief over there.
@@ -13,8 +10,6 @@ should be here. It's these Stormcloaks the Empire wants.
 Ralof: We're all brothers and sisters in binds now, thief.
 
 Imperial Soldier: Shut up back there!
-
-[Lokir looks at the gagged man.]
 
 Lokir: And what's wrong with him?
 
@@ -36,8 +31,6 @@ Ralof: A Nord's last thoughts should be of home.
 
 Lokir: Rorikstead. I'm...I'm from Rorikstead.
 
-[They approach the village of Helgen. A soldier calls out to the lead wagon.]
-
 Imperial Soldier: General Tullius, sir! The headsman is waiting!
 
 General Tullius: Good. Let's get this over with.
@@ -51,8 +44,6 @@ with this.
 This is Helgen. I used to be sweet on a girl from here. Wonder if Vilod
 is still making that mead with juniper berries mixed in. Funny...when I
 was a boy, Imperial walls and towers used to make me feel so safe.
-
-[A man and son watch the prisoners pull into town.]
 
 Haming: Who are they, daddy? Where are they going?
 

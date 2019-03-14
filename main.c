@@ -1,4 +1,5 @@
 
+#include "hashmap.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -27,47 +28,51 @@ int *open_files(int num, char **file_names) {
 	return fd_list;
 }
 
-void read_files(int numfiles, int *fdlist, char **all_text) {
+char *read_files(int numfiles, int *fdlist) {
 	char buffer[BUFF_SIZE] = "\0";
-	printf("kill me\n");
 	char *text_ptr = (char *) malloc(BUFF_SIZE);
-	printf("kill me2\n");
-	int num_read = 0;
+	int num_read = 0, total = 0;
+
 	// iterates the loop until all of the files are read
 	for (int i = 0, j = 0; j < numfiles; ++i) {
 		num_read = read(fdlist[j], buffer, BUFF_SIZE);
 		printf("%i\n", num_read);
 		strcat(text_ptr, buffer);
 		buffer[0] = '\0';
-		// perror("read");
-		// if EOF is reached
-		// if (num_read == NO_DATA_READ) {
-		//
-		// }
+
 		if (num_read < BUFF_SIZE) {
-			text_ptr[BUFF_SIZE * i + num_read] = '\0';
+			text_ptr[BUFF_SIZE * i + num_read + i] = '\0';
 			printf("tiger\n");
 			++j;
 		}
 
 		if (j < numfiles) {
-			printf("salmoo0n\n");
-			char *tmp_ptr = (char *) realloc(text_ptr, (i + 2) * BUFF_SIZE);
-			printf("yo shawty how you do mayne\n");
+
+			total = (i + 2) * BUFF_SIZE;
+			char tmp_ptr[total];
+			tmp_ptr[0] = '\0';
+			memcpy(tmp_ptr, text_ptr, total);
+			// char *tmp_ptr = (char *) realloc(text_ptr, (i + 2) * BUFF_SIZE + 1);
+
 			free(text_ptr);
-			printf("suh cuh\n");
-			text_ptr = malloc((i + 2) * BUFF_SIZE);
-			printf("pepo happy\n");
-			strcpy(text_ptr, tmp_ptr);
-			printf("work dammit\n");
-			free(tmp_ptr);
-			printf("tim $$$ help\n");
+
+			text_ptr = (char *) malloc(total);
+
+			memcpy(text_ptr, tmp_ptr, total);
+			// printf("work dammit\n");
+			// free(tmp_ptr);
+			// printf("tim $$$ help\n");
 			// memcpy(text_ptr, tmp_ptr);
 			// perror("realloc");
-			printf("salmoo1n\n");
+			// printf("salmoo1n\n");
 		}
 	}
-	*all_text = text_ptr;
+	// *all_text = text_ptr;
+	printf("%i \n", total);
+	return text_ptr;
+	// *all_text = (char *) malloc(total);
+	// printf("i'm finnish\n");
+	// strcpy(*all_text, text_ptr);
 }
 
 /*
@@ -84,7 +89,7 @@ void read_files(int numfiles, int *fdlist, char **all_text) {
 int main(int argc, char *argv[]) {
 	int *fd_list;
 	// char all_text[][BUFF_SIZE];
-	char **all_text;
+	char *all_text;
 
 	printf("test\n");
 	switch(argc) {
@@ -101,11 +106,11 @@ int main(int argc, char *argv[]) {
 		}
 		printf("oi\n");
 		// read(fd_list[0], all_text, BUFF_SIZE);
-		read_files(argc - 1, fd_list, all_text);
+		all_text = read_files(argc - 1, fd_list);
 	}
 	//
 	// for (int i = 0; i < BUFF_SIZE; ++i) {
-	// printf("%s\n", all_text);
+	printf("%s\n", all_text);
 
 	return 0;
 }

@@ -87,6 +87,9 @@ char *read_files(int numfiles, int *fdlist) {
  *     - Manage each occurence in a hashmap
  */
 int main(int argc, char *argv[]) {
+	// inits hashmap for tracking each word
+	Hashmap *words = hashmap(words);
+
 	int *fd_list;
 	// char all_text[][BUFF_SIZE];
 	char *all_text;

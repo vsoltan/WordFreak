@@ -1,14 +1,12 @@
 
-SRC = main.c hashmap.c
-OBJ = main.o hashmap.o
+SRC  = main.c hashmap.c
+OBJ  = main.o hashmap.o
 PROG = wordfreak
 DEPS = hashmap.h
 
-%.o: %.c $(DEPS)
-	gcc -c -o $@ $<
-
 $(PROG): $(OBJ)
-	gcc -o $(PROG) $(OBJ)
-#hashmap.o : $(DEPS)
+	gcc $(OBJ) -o $(PROG)
 
-#-include $(DEPS)
+$(OBJ): $(SRC)
+main.o: hashmap.h
+hashmap.o: hashmap.h

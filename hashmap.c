@@ -1,15 +1,27 @@
 
-#include "hashmap.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "hashmap.h"
 
 // increase HASH_SIZE to reduce collision in the dicttionary
 // should be a prime number
 #define HASH_SIZE 97
 
-// static implementation of the dictionary
-static HM_Entry *hashmap[HASH_SIZE];
+// accepts pointer to a hashmap and initializes the array
+// returns the pointer to the hashmap passed
+Hashmap *hashmap(Hashmap *hm) {
+	hm = malloc(sizeof(Hashmap));
+	
+	hm->entries = malloc(sizeof(HM_Entry) * HASH_SIZE);
+	if(hm == NULL || hm->entries == NULL) {
+		printf("could not malloc hashmap\n");
+		exit(EXIT_FAILURE);
+	}
+
+	return hm;
+}
+
 
 // implements a basic hash algorithm based on the value of the pointer passed
 // Uses RS Hash https://stackoverflow.com/questions/6136964/rs-hashing-program
@@ -29,8 +41,8 @@ int get_hash(char *key) {
 
 // gets the entry in the dictionary that corresponds to the passed value,
 // returns a pointer to the that entry
-HM_Entry *get_entry(char *key) {
-	for(HM_Entry *entry = hashmap[get_hash(key)]; entry != NULL; entry = entry->next) {
+HM_Entry *get_entry(Hashmap *hm, char *key) {
+	for(HM_Entry *entry = hm->entries[get_hash(key)]; entry != NULL; entry = entry->next) {
 		if(strcmp(key, entry->key) == 0) {
 			return entry;
 		}
@@ -43,8 +55,8 @@ HM_Entry *get_entry(char *key) {
 // enters the key and value into the dictionary,
 // if the key doesn't exist, then create a new entry
 // if the key already exists, then replace it's current value with the passed value
-HM_Entry *set_entry(char *key, int *value) {
-	HM_Entry *entry = get_entry(key);
+HM_Entry *set_entry(Hashmap *hm, char *key, int *value) {
+	HM_Entry *entry = get_entry(hm, key);
 	int hash = get_hash(key);
 
 	// if the entry not found
@@ -58,7 +70,7 @@ HM_Entry *set_entry(char *key, int *value) {
 			exit(EXIT_FAILURE);
 		}
 
-		hashmap[hash] = entry;
+		(hm->entries)[hash] = entry;
 
 	} else {
 		// if entry already exists, then free the old value so it can be updated

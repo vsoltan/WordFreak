@@ -6,17 +6,25 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define PATH "./texts/"
-#define BUFF_SIZE 256
-#define NO_DATA_READ 0
+#define BUFF_SIZE 16384
 #define NO_FILE_OPENED -1
+// checks if the passed char is not a whitespace (space, tab, enter, etc)
+#define IS_WHITESPACE(c) c == ' ' || c == '\n' || c == '\t' || c == '\v' || c == '\f' || c == '\r'
+// checks if the passed char is alphanumeric
+#define IS_ALPHANUMERIC(c) 'a' <= c && c <= 'z' || 'A' <= c && <= 'Z' || c == "\'"
 
 // takes an array file names, and the number of files and opens those files in the directory specified by the constant PATH
 // returns an array containing the file descriptors for every file specified
 int *open_files(int num, char **file_names) {
 	// list of the file descriptors
 	int *fd_list = calloc(num, sizeof(int));
+	if (fd_list == NULL) {
+		perror("calloc");
+		exit(EXIT_FAILURE);
+	}
 	for (int i = 0; i < num; ++i) {
 		char file_path[256] = PATH;
 		strcat(file_path, file_names[i]);
@@ -28,51 +36,71 @@ int *open_files(int num, char **file_names) {
 	return fd_list;
 }
 
-char *read_files(int numfiles, int *fdlist) {
+// reads all the passed files
+// returns a string containing all the text of all the passed files
+char *read_files(int num_files, int *fd_list) {
 	char buffer[BUFF_SIZE] = "\0";
 	char *text_ptr = (char *) malloc(BUFF_SIZE);
-	int num_read = 0, total = 0;
+	if (text_ptr == NULL) {
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	int num_read = 0, total = 0, i = 0;
 
 	// iterates the loop until all of the files are read
-	for (int i = 0, j = 0; j < numfiles; ++i) {
-		num_read = read(fdlist[j], buffer, BUFF_SIZE);
-		printf("%i\n", num_read);
+	for (int cur_file = 0; cur_file < num_files; ++i) {
+		num_read = read(fd_list[cur_file], buffer, BUFF_SIZE);
 		strcat(text_ptr, buffer);
 		buffer[0] = '\0';
 
+		// reached the end of a file
 		if (num_read < BUFF_SIZE) {
-			text_ptr[BUFF_SIZE * i + num_read + i] = '\0';
-			printf("tiger\n");
-			++j;
+			int cf = close(fd_list[cur_file]);
+			if (cf == -1) {
+				perror("close");
+				exit(EXIT_FAILURE);
+			}
+			++cur_file;
 		}
-
-		if (j < numfiles) {
-
+		// if there are more files left to read
+		if (cur_file < num_files) {
+			// increases the size of total
 			total = (i + 2) * BUFF_SIZE;
+
 			char tmp_ptr[total];
 			tmp_ptr[0] = '\0';
-			memcpy(tmp_ptr, text_ptr, total);
-			// char *tmp_ptr = (char *) realloc(text_ptr, (i + 2) * BUFF_SIZE + 1);
+
+			strcpy(tmp_ptr, text_ptr);
 
 			free(text_ptr);
 
 			text_ptr = (char *) malloc(total);
 
-			memcpy(text_ptr, tmp_ptr, total);
-			// printf("work dammit\n");
-			// free(tmp_ptr);
-			// printf("tim $$$ help\n");
-			// memcpy(text_ptr, tmp_ptr);
-			// perror("realloc");
-			// printf("salmoo1n\n");
+			strcpy(text_ptr, tmp_ptr);
 		}
 	}
-	// *all_text = text_ptr;
-	printf("%i \n", total);
+	text_ptr[BUFF_SIZE * (i - 1) + num_read] = '\0';
+	printf("String terminates at: %i \n", BUFF_SIZE * (i - 1) + num_read);
 	return text_ptr;
-	// *all_text = (char *) malloc(total);
-	// printf("i'm finnish\n");
-	// strcpy(*all_text, text_ptr);
+}
+
+// input: a string of words to be parsed
+// output: a hashmap which
+// reads the passed string and counts the number of occurences for each word
+// a word is defined as follows:
+//  - a set of alphanumeric characters (a-z, A-Z, 0-9), em-dash(-), and apostrophese(')
+//  - seperated by whitespace characters (space, tab, enter)
+Hashmap *parse_string(char *text) {
+	Hashmap *words = init_hashmap();
+	int length = strlen(text);
+
+	// iterates over the text
+	for(int i = 0; i < length; ++i) {
+
+	}
+
+
+	return NULL;
 }
 
 /*
@@ -87,14 +115,26 @@ char *read_files(int numfiles, int *fdlist) {
  *     - Manage each occurence in a hashmap
  */
 int main(int argc, char *argv[]) {
-	// inits hashmap for tracking each word
-	Hashmap *words = hashmap(words);
+	Hashmap *test_map = init_hashmap();
+	int test1 = 5;
+	int test2 = 15;
+
+	// DEBUGGING:
+	// printf("calling set entry\n");
+	// HM_Entry *entry1 = set_entry(test_map, "Deniz", &test1);
+	// HM_Entry *entry2 = set_entry(test_map, "Valeriy", &test2);
+	// printf("calling get entry\n");
+	// HM_Entry *retrived1 = get_entry(test_map, "Deniz");
+	// HM_Entry *retrived2 = get_entry(test_map, "Valeriy");
+	// printf("%i\n", *(retrived1->value));
+	// printf("%i\n", *(retrived2->value));
 
 	int *fd_list;
 	// char all_text[][BUFF_SIZE];
 	char *all_text;
 
 	printf("test\n");
+	// switch statement to handle different numbers of input
 	switch(argc) {
 	// too few inputs
 	case 1:
@@ -114,6 +154,5 @@ int main(int argc, char *argv[]) {
 	//
 	// for (int i = 0; i < BUFF_SIZE; ++i) {
 	printf("%s\n", all_text);
-
 	return 0;
 }

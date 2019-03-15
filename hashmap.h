@@ -1,4 +1,7 @@
-#define HASH_SIZE 97
+
+#define HASH_SIZE 101
+
+
 // struct that models an individual entry in a hashmap
 // has values for the entry's name/key, and the value associated with that name/key
 // only works when the name is a "string" and the value is an int, as that is what's necessary for this project
@@ -12,10 +15,10 @@ typedef struct hashmap {
 	HM_Entry *entries[HASH_SIZE];
 } Hashmap;
 
-// "constructor" for hashmap struct
-Hashmap *init_hashmap();
+// constructors
+HM_Entry *init_entry();
 
-HM_Entry *init_entry(char *key, hm_entry *next);
+Hashmap *init_hashmap();
 
 // calculates the hash value of a provided string using RS Hash
 unsigned long get_hash(char *c);

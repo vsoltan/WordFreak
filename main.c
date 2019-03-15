@@ -11,6 +11,7 @@
 #define PATH "./texts/"
 #define BUFF_SIZE 16384
 #define MAX_WORD_SIZE 50
+#define HASH 101
 #define NO_FILE_OPENED -1
 // checks if the passed char is not a whitespace (space, tab, enter, etc)
 #define IS_WHITESPACE(c) c == ' ' || c == '\n' || c == '\t' || c == '\v' || c == '\f' || c == '\r'
@@ -100,7 +101,6 @@ Hashmap *parse_string(char *text) {
 	if (text == NULL) {
 		return NULL;
 	}
-
 	// initialize a hashmap to store all occurances of text
 	Hashmap *word_map = init_hashmap();
 	// number of characters that have to be parsed
@@ -117,15 +117,11 @@ Hashmap *parse_string(char *text) {
 			if (strcmp(word, "") == 0) continue;
 			word[j] = '\0';
 			j = 0;
-			// hashmap thing
-			// printf("this is what is getting added to map: %s", word);
 			set_entry(&word_map, word);
-			// printf("did it change after getting added? %s", word);
 			word[0] = '\0';
 		}
 	}
-	// HM_Entry *ret = get_entry(word_map, "tiger");
-	// printf("%i\n\n", (ret)?ret->value:0);
+
 	return word_map;
 }
 
@@ -135,15 +131,15 @@ void print_word_occ(Hashmap *map) {
 	// 	char formatted_line[80] = "";
 	// 	// sprintf()
 	// 	// write(STDOUT, get_entry(), strlen(get_entry(map, i)));
-	for (int i = 0; i < HASH_SIZE; ++i) {
+	for (int i = 0; i < HASH; ++i) {
 		HM_Entry *curr = map->entries[i];
 		if (curr != NULL) {
+			printf("is this scuffed\n");
 			printf("%20s  |  %2i\n", curr->key, curr->value);
+			// printf("%20s\n", curr->key);
 		}
-}
-
-		// printf("%20s  |  %2i\n", get_entry(map, hard_coded_strings[i])->key, get_entry(map, hard_coded_strings[i])->value);
 	}
+}
 
 /*
  * Basic project functionality outline:
@@ -157,48 +153,24 @@ void print_word_occ(Hashmap *map) {
  *     - Manage each occurence in a hashmap
  */
 int main(int argc, char *argv[]) {
-	// Hashmap *test_map = init_hashmap();
-	// // int test1 = 5;
-	// // int test2 = 15;
-	// //
-	// // DEBUGGING:
-	// printf("calling set entry\n");
-	// HM_Entry *entry1 = set_entry(&test_map, "Deniz");
-	// HM_Entry *retrived1 = get_entry(test_map, "Deniz");
-	// printf("%i\n", retrived1->value);
-	// HM_Entry *entry2 = set_entry(&test_map, "Valeriy");
-	// HM_Entry *retrived2 = get_entry(test_map, "Valeriy");
-	// printf("%i\n", retrived2->value);
-	// HM_Entry *entry3 = set_entry(&test_map, "Valeriy");
-	// printf("calling get entry\n");
-	// HM_Entry *retrived3 = get_entry(test_map, "Valeriy");
-	// printf("%i\n", retrived3->value);
-
 	int *fd_list;
-	// char all_text[][BUFF_SIZE];
 	char *all_text;
 
-	// switch statement to handle different numbers of input
+	// switch statement to handle different input formats
 	switch(argc) {
-	// too few inputs
+	// TODO: piping for when no input is given
 	case 1:
 		printf("fail\n");
 		exit(EXIT_FAILURE);
 	default:
-		printf("test %i\n", argc - 1);
-		// int *fd_list = open_files(argc - 1, argv + 1);
 		if ((fd_list = open_files(argc - 1, argv + 1)) == NULL) {
 			printf("fail\n");
 			exit(EXIT_FAILURE);
 		}
-		// read(fd_list[0], all_text, BUFF_SIZE);
 		all_text = read_files(argc - 1, fd_list);
 		Hashmap *hm = parse_string(all_text);
 		print_word_occ(hm);
 
 	}
-	//
-	// for (int i = 0; i < BUFF_SIZE; ++i) {
-	printf("%s\n", all_text);
 	return 0;
 }

@@ -70,13 +70,9 @@ char *read_files(int num_files, int *fd_list) {
 
 			char tmp_ptr[total];
 			tmp_ptr[0] = '\0';
-
 			strcpy(tmp_ptr, text_ptr);
-
 			free(text_ptr);
-
 			text_ptr = (char *) malloc(total);
-
 			strcpy(text_ptr, tmp_ptr);
 		}
 	}
@@ -105,14 +101,10 @@ Hashmap *parse_string(char *text) {
 		return NULL;
 	}
 
-	// printf("1\n");
-
 	// initialize a hashmap to store all occurances of text
 	Hashmap *word_map = init_hashmap();
 	// number of characters that have to be parsed
 	int length = strlen(text);
-
-	// printf("2\n");
 
 	// iterates over the text
 	char word[MAX_WORD_SIZE] = "";
@@ -126,7 +118,9 @@ Hashmap *parse_string(char *text) {
 			word[j] = '\0';
 			j = 0;
 			// hashmap thing
-			set_entry(word_map, word);
+			// printf("this is what is getting added to map: %s", word);
+			set_entry(&word_map, word);
+			// printf("did it change after getting added? %s", word);
 			word[0] = '\0';
 		}
 	}
@@ -144,7 +138,7 @@ void print_word_occ(Hashmap *map) {
 	for (int i = 0; i < HASH_SIZE; ++i) {
 		HM_Entry *curr = map->entries[i];
 		if (curr != NULL) {
-			printf("%20s  |  %2i\n\n", curr->key, curr->value);
+			printf("%20s  |  %2i\n", curr->key, curr->value);
 		}
 }
 
@@ -164,18 +158,18 @@ void print_word_occ(Hashmap *map) {
  */
 int main(int argc, char *argv[]) {
 	// Hashmap *test_map = init_hashmap();
-	// int test1 = 5;
-	// int test2 = 15;
-	//
-	// DEBUGGING:
+	// // int test1 = 5;
+	// // int test2 = 15;
+	// //
+	// // DEBUGGING:
 	// printf("calling set entry\n");
-	// HM_Entry *entry1 = set_entry(test_map, "Deniz");
+	// HM_Entry *entry1 = set_entry(&test_map, "Deniz");
 	// HM_Entry *retrived1 = get_entry(test_map, "Deniz");
 	// printf("%i\n", retrived1->value);
-	// HM_Entry *entry2 = set_entry(test_map, "Valeriy");
+	// HM_Entry *entry2 = set_entry(&test_map, "Valeriy");
 	// HM_Entry *retrived2 = get_entry(test_map, "Valeriy");
 	// printf("%i\n", retrived2->value);
-	// HM_Entry *entry3 = set_entry(test_map, "Valeriy");
+	// HM_Entry *entry3 = set_entry(&test_map, "Valeriy");
 	// printf("calling get entry\n");
 	// HM_Entry *retrived3 = get_entry(test_map, "Valeriy");
 	// printf("%i\n", retrived3->value);

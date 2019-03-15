@@ -9,11 +9,13 @@ typedef struct hm_entry {
 } HM_Entry;
 
 typedef struct hashmap {
-	HM_Entry **entries;
+	HM_Entry *entries[HASH_SIZE];
 } Hashmap;
 
 // "constructor" for hashmap struct
 Hashmap *init_hashmap();
+
+HM_Entry *init_entry(char *key, hm_entry *next);
 
 // calculates the hash value of a provided string using RS Hash
 unsigned long get_hash(char *c);
@@ -22,4 +24,4 @@ unsigned long get_hash(char *c);
 HM_Entry *get_entry(Hashmap *hm, char *key);
 
 // enters the key and value into the dictionary, if the key already exists, then replace it's value with the passed value
-HM_Entry *set_entry(Hashmap *hm, char *key);
+HM_Entry *set_entry(Hashmap **hm, char *key);

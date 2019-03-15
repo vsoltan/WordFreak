@@ -9,10 +9,19 @@
 
 // accepts pointer to a hashmap and initializes the array
 // returns the pointer to the hashmap passed
+
+HM_Entry *init_entry(char *key, hm_entry *next) {
+	HM_Entry *entry = (HM_Entry *) malloc(sizeof(HM_Entry));
+	entry->key = key;
+	next = NULL;
+
+	return entry;
+}
+
 Hashmap *init_hashmap() {
 	Hashmap *hm = malloc(sizeof(Hashmap));
-	hm->entries = calloc(HASH_SIZE, sizeof(HM_Entry *));
-	if(hm == NULL || hm->entries == NULL) {
+	// hm->entries = calloc(HASH_SIZE, sizeof(HM_Entry *));
+	if(hm == NULL) {
 		perror("malloc");
 		exit(EXIT_FAILURE);
 	}
@@ -38,11 +47,9 @@ HM_Entry *get_entry(Hashmap *hm, char *key) {
 
 	// printf("%p\n", hm->entries[get_hash(key)]);
 	for(HM_Entry *entry = hm->entries[get_hash(key)]; entry != NULL; entry = entry->next) {
-		// printf("for loop iteration\n");
 		// because short circuit evaluation does not exist
 		if (entry != NULL) {
 			if (strcmp(key , entry->key) == 0) {
-				// printf("entered the if statement\n");
 				return entry;
 			}
 		}
@@ -54,10 +61,10 @@ HM_Entry *get_entry(Hashmap *hm, char *key) {
 // enters the key and value into the dictionary,
 // if the key doesn't exist, then create a new entry
 // if the key already exists, then replace it's current value with the passed value
-HM_Entry *set_entry(Hashmap *hm, char *key) {
+HM_Entry *set_entry(Hashmap **hm, char *key) {
 
 	// NULL if empty
-	HM_Entry *entry = get_entry(hm, key);
+	HM_Entry *entry = get_entry(*hm, key);
 	if (entry == NULL) {
 		printf("there is nothing there before insertion\n");
 	}
@@ -66,20 +73,26 @@ HM_Entry *set_entry(Hashmap *hm, char *key) {
 	// if the entry not found
 	if (entry == NULL) {
 		// then create a new entry
-		entry = (HM_Entry *) malloc(sizeof(HM_Entry));
+		HM_Entry *new_entry = (HM_Entry *) malloc(sizeof(HM_Entry));
 		// could not malloc
-		if (entry == NULL) {
+		if (new_entry == NULL) {
 			perror("malloc");
 			exit(EXIT_FAILURE);
 		}
 
-		entry->key = key;
-		// if entry is initialized for the first time, counter set to 1
-		entry->value = 1;
+		printf("hello\n");
 
-		hm->entries[hash] = entry;
+		// printf("%s\n", (entry != NULL)?entry->key:"(null)");
+		// strcpy(entry->key, key);
+		new_entry->key = key;
+		printf("%s\n", new_entry->key);
+		// if entry is initialized for the first time, counter set to 1
+		new_entry->value = 1;
+
+		(*hm)->entries[hash] = new_entry;
 		printf("insertion complete?\n");
-		printf("entries[hash] = %s\n", hm->entries[hash]->key);
+		printf("entries[hash : %i] = %s\n", hash, (*hm)->entries[hash]->key);
+		entry = new_entry;
 	} else {
 		// if entry already exists, then free the old value so it can be updated
 		entry->value = entry->value + 1;

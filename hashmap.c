@@ -16,12 +16,16 @@ Hashmap *init_hashmap() {
 		perror("malloc");
 		exit(EXIT_FAILURE);
 	}
+	// initialize the entries in the list of entries to NULL
+	for (int i  = 0; i < HASH_SIZE; ++i) {
+		hm->entries[i] = NULL;
+	}
 	return hm;
 }
 
 HM_Entry *init_entry() {
 	HM_Entry *new_entry = (HM_Entry *) malloc(sizeof(HM_Entry));
-	new_entry->key = (char *) malloc(50);                             //MAX_WORD_SIZE
+	new_entry->key = (char *) malloc(50);
 }
 
 // uses the hash algorithm djb2
@@ -39,18 +43,18 @@ unsigned long get_hash(char *key) {
 // gets the entry in the dictionary that corresponds to the passed value,
 // returns a pointer to the that entry
 HM_Entry *get_entry(Hashmap *hm, char *key) {
+	// printf("inside get entry\n");
 	// handles collision of keys in the hashmap TODO DOESN'T HANDLE COLLISIONS YET
 	HM_Entry *entry;
 	for(entry = hm->entries[get_hash(key)]; entry != NULL; entry = entry->next) {
-		// because short circuit evaluation does not exist
-		if (entry != NULL) {
-			if (strcmp(key, entry->key) == 0) {
-				return entry;
-			}
+		// printf("before check\n");
+		if (strcmp(key, entry->key) == 0) {
+			// printf("inside if statement\n");
+			return entry;
 		}
 	}
 	// printf("entry does not exist [not an error]\n");
-	return entry;
+	return NULL;
 }
 
 // enters the key and value into the dictionary,
@@ -86,6 +90,5 @@ HM_Entry *set_entry(Hashmap **hm, char *key) {
 		// if entry already exists, then free the old value so it can be updated
 		entry->value = entry->value + 1;
 	}
-
 	return entry;
 }

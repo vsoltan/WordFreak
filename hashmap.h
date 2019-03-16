@@ -1,5 +1,5 @@
 
-#define HASH_SIZE 101
+#define HASH_SIZE 1223
 
 
 // struct that models an individual entry in a hashmap

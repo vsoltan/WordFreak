@@ -21,6 +21,8 @@
 
 // takes an array file names, and the number of files and opens those files in the directory specified by the constant PATH
 // returns an array containing the file descriptors for every file specified
+
+
 int *open_files(int num, char **file_names) {
 	// list of the file descriptors
 	int *fd_list = calloc(num, sizeof(int));
@@ -128,6 +130,58 @@ Hashmap *parse_string(char *text) {
 	return word_map;
 }
 
+// combines the functionality of read() and parse()
+// allows the program to work with larger files by reading a file in multiple portions so that the buffer doesn't have to be ridiculously large
+Hashmap *read_parse(int num_files, int *fd_list) {
+	//
+	Hashmap *word_map = init_hashmap();
+
+	char buffer[BUFF_SIZE] = "\0";
+	char word[MAX_WORD_SIZE] = "";
+	// num_read: number of chars put onto the buffer by read()
+	// total: total number of chars read
+	// buff_num: the number of buffers that have been iterated through
+	int num_read = 0, total = 0, buff_num = 0;
+
+	// iterates over each file
+	for (int cur_file = 0; cur_file < num_files; ++buff_num) {
+		num_read = read(fd_list[cur_file], buffer, BUFF_SIZE);
+		// if the number of chars read is less than the buffer, reached the EOF
+		if (num_read < BUFF_SIZE) {
+			int cf = close(fd_list[cur_file]);
+			if (cf == -1) {
+				perror("close");
+				exit(EXIT_FAILURE);
+			}
+			++cur_file;
+		}
+
+
+		// cur_char: the current character that we are looking at
+		// word_char: the current character in the word that we are building
+		for(int cur_char = 0, word_char = 0; cur_char < num_read; ++cur_char) {
+
+			if (IS_ALPHANUMERIC(buffer[cur_char])) {
+				word[word_char++] = to_lowercase(buffer[cur_char]);
+			}
+			if (IS_WHITESPACE(buffer[cur_char])) {
+				// if no word is constructed keep iterating
+				if (strcmp(word, "") == 0) continue;
+				// reset the word C string
+				word[word_char] = '\0';
+				// reset the index for word building
+				word_char = 0;
+				// add the word to the hashmap
+				set_entry(&word_map, word);
+				word[0] = '\0';
+			}
+		}
+
+	}
+	printf("String terminates at: %i \n", BUFF_SIZE * (buff_num - 1) + num_read);
+	return word_map;
+}
+
 // prints out all the words in the read files and their occurences
 void print_word_occ(Hashmap *map) {
 	for (int i = 0; i < HASH_SIZE; ++i) {
@@ -171,8 +225,9 @@ int main(int argc, char *argv[]) {
 			printf("fail\n");
 			exit(EXIT_FAILURE);
 		}
-		all_text = read_files(argc - 1, fd_list);
-		Hashmap *hm = parse_string(all_text);
+		// all_text = read_files(argc - 1, fd_list);
+		// Hashmap *hm = parse_string(all_text);
+		Hashmap *hm = read_parse(argc - 1, fd_list);
 		print_word_occ(hm);
 
 	}

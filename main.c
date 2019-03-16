@@ -1,19 +1,7 @@
 
 #include "hashmap.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <string.h>
-#include <stdbool.h>
 
-#define PATH "./texts/"
-#define BUFF_SIZE 16384
-#define MAX_WORD_SIZE 50
-#define STDOUT 1
-#define NO_FILE_OPENED -1
-#define FORMATTED_LINE_LENGTH 62
+
 // checks if the passed char is not a whitespace (space, tab, enter, etc)
 #define IS_WHITESPACE(c) c == ' ' || c == '\n' || c == '\t' || c == '\v' || c == '\f' || c == '\r'
 // checks if the passed char is alphanumeric
@@ -114,12 +102,11 @@ Hashmap *read_parse(int num_files, int *fd_list) {
 		}
 
 	}
-	printf("String terminates at: %i \n", BUFF_SIZE * (buff_num - 1) + num_read);
 	free(fd_list);
 	return word_map;
 }
 
-// prints out all the words in the read files and their occurences
+// prints out all the words and their occurences in the processed files
 void print_word_occ(Hashmap *map) {
 	for (int i = 0; i < HASH_SIZE; ++i) {
 		HM_Entry *curr = map->entries[i];
@@ -136,59 +123,88 @@ void print_word_occ(Hashmap *map) {
 	}
 }
 
-/*
- * Basic project functionality outline:
- *  - Get user input
- *     - Command line arguments
- *     - Standard input
- *     - Environment variable WORD_FREAK
- *  - Sanitize input
- *  - Iterate over input
- *  - Count each occurence of each word
- *     - Manage each occurence in a hashmap
- */
-int main(int argc, char *argv[], char *envp[]) {
-	int *fd_list;
-	int num_files;
-	char *all_text;
+bool input_piping() {
+	// initializes input by adding the fd for stdin to a fd_set
+	fd_set readfds;
+	FD_ZERO(&readfds);
+	FD_SET(STDIN_FILENO, &readfds);
 
+	// we only want to see if we are already able to read from stdin
+	// so we set it to timeout after 0 seconds
+	struct timeval timeout;
+	timeout.tv_sec = 0;
+	timeout.tv_usec = 0;
 
-	// switch statement to handle different input formats
+	//gets the number of fds that are ready to be read from
+	int select_returnval = select(1, &readfds, NULL, NULL, &timeout);
 
-	// ./wordfreak is the only arg in argv
+	// if there are files set to be read, and stdin is one of those files, we are ready for piping
+	return select_returnval > 0 && FD_ISSET(STDIN_FILENO, &readfds) != 0;
+}
+
+// take the cmd parameters from main()
+// returns an array of file descriptors
+int *process_input(int argc, char *argv[], int *num_files) {
+
+	// too few arguments, ""./wordfreak" is the only entry in argv
 	if (argc == 1) {
 		exit(EXIT_FAILURE);
 	}
 
-	// no files were added to fd_list
-	if ((fd_list = open_files(argc - 1, argv + 1)) == NULL) {
-		exit(EXIT_FAILURE);
-	}
+	// array containing all read file descriptors
+	// TODO free return_val in main - done
+	int *fd_list;
 
-	// retriving environmental variables
-	if (envp != NULL) {
-		printf("envp is not empty!\n");
-		char *word_freak = envp[0];
-		printf("%s\n", word_freak);
-	}
+	 // ENVIRONMENTAL VARIABLE
+	 if (getenv("WORD_FREAK")) {
+		 printf("it exists!\n"); // TODO remove printf
+	 } else if(input_piping()) {
+		 // PIPING
+		 printf("piping\n"); // TODO remove printf
+		 fd_list = malloc(sizeof(int));
+		 if (fd_list == NULL) {
+			 perror("malloc");
+			 exit(EXIT_FAILURE);
+		 }
+		 // gets the fd of standard in and puts it in the list
+		 fd_list[0] = STDIN_FILENO;
+		 *num_files = 1;
+	 } else {
+		 // CMD ARGUMENTS (Default case)
+		 printf("cmd arguments\n"); // TODO remove printf
+		 fd_list = malloc(sizeof(int) * (argc - 1));
+		 // checking that malloc worked
+		 if (fd_list == NULL) {
+			 perror("malloc");
+			 exit(EXIT_FAILURE);
+		 }
 
-	// piping command case
-	if (strcmp(argv[0], "cat") == 0 && (argv[argc - 2], "|") == 0) {
-		// TODO: piping???
-		/*
-		 *      _
-		 *  .__(.)<  (MEOW)
-		 *   \___)
-		 */
-		// piping what is
-	} else {
-		// any other configuration
-		num_files = argc - 1;
-		// files = fd_list;
+		 // gets all the fd from the files in the cmd line args and adds them to the list
+		 fd_list = open_files(argc - 1, argv + 1);
+		 *num_files = argc - 1;
+		 // null checking
+		 if(fd_list == NULL) {
+			 exit(EXIT_FAILURE);
+		 }
+	 // }
+	 return fd_list;
 	}
+}
 
+int run_word_freak(int argc, char *argv[]) {
+	int *fd_list;
+	char *all_text;
+	int num_files;
+
+	// processes the user input (any form of it) and gets an array of all the file descriptors to be read, and the size of that array
+	fd_list = process_input(argc, argv, &num_files);
+
+	// reads and parses the text in the passed files
 	Hashmap *hm = read_parse(num_files, fd_list);
 	print_word_occ(hm);
-
 	return 0;
+}
+
+int main(int argc, char *argv[]) {
+	run_word_freak(argc, argv);
 }

@@ -39,6 +39,7 @@ int main(void) {
     //  - EINVAL if the timeout argument is invalid - one of the values is either too large, or negative
     int select_returnval = select(1, &readfds, NULL, NULL, &timeout);
 
+    // tests if we can read from the STDIN_FILENO and prints the result to the console
     if(select_returnval > 0) {
         printf("There are files ready\n");
     }

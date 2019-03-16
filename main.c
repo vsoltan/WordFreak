@@ -123,7 +123,9 @@ void print_word_occ(Hashmap *map) {
 	}
 }
 
+// checks if we have to process input through piping from stdin
 bool input_piping() {
+	printf("input_piping()");
 	// initializes input by adding the fd for stdin to a fd_set
 	fd_set readfds;
 	FD_ZERO(&readfds);
@@ -145,11 +147,8 @@ bool input_piping() {
 // take the cmd parameters from main()
 // returns an array of file descriptors
 int *process_input(int argc, char *argv[], int *num_files) {
-
-	// too few arguments, ""./wordfreak" is the only entry in argv
-	if (argc == 1) {
-		exit(EXIT_FAILURE);
-	}
+	//debug
+	printf("process_input()\n");
 
 	// array containing all read file descriptors
 	// TODO free return_val in main - done
@@ -185,10 +184,9 @@ int *process_input(int argc, char *argv[], int *num_files) {
 		 // null checking
 		 if(fd_list == NULL) {
 			 exit(EXIT_FAILURE);
-		 }
-	 // }
-	 return fd_list;
+		 }	 
 	}
+	return fd_list;
 }
 
 int run_word_freak(int argc, char *argv[]) {

@@ -133,7 +133,6 @@ Hashmap *parse_string(char *text) {
 // combines the functionality of read() and parse()
 // allows the program to work with larger files by reading a file in multiple portions so that the buffer doesn't have to be ridiculously large
 Hashmap *read_parse(int num_files, int *fd_list) {
-	//
 	Hashmap *word_map = init_hashmap();
 
 	char buffer[BUFF_SIZE] = "\0";
@@ -141,7 +140,8 @@ Hashmap *read_parse(int num_files, int *fd_list) {
 	// num_read: number of chars put onto the buffer by read()
 	// total: total number of chars read
 	// buff_num: the number of buffers that have been iterated through
-	int num_read = 0, total = 0, buff_num = 0;
+	// stunt: ???
+	int num_read = 0, total = 0, buff_num = 0, stunt = 0;
 
 	// iterates over each file
 	for (int cur_file = 0; cur_file < num_files; ++buff_num) {
@@ -156,11 +156,10 @@ Hashmap *read_parse(int num_files, int *fd_list) {
 			++cur_file;
 		}
 
-
 		// cur_char: the current character that we are looking at
 		// word_char: the current character in the word that we are building
-		for(int cur_char = 0, word_char = 0; cur_char < num_read; ++cur_char) {
-
+		int word_char = 0;
+		for(int cur_char = 0; cur_char < num_read; ++cur_char) {
 			if (IS_ALPHANUMERIC(buffer[cur_char])) {
 				word[word_char++] = to_lowercase(buffer[cur_char]);
 			}
@@ -177,8 +176,16 @@ Hashmap *read_parse(int num_files, int *fd_list) {
 			}
 		}
 
+		// TODO: we need a way to check if the word we just read is the last word in the file
+		// if that's true, then add it to the hashmap, because normally it would be ignored since there is no space after the last word
+		if (stunt < cur_file && strcmp(word, "") != 0) {
+			word[word_char] = '\0';
+			set_entry(&word_map, word);
+		}
+
 	}
 	printf("String terminates at: %i \n", BUFF_SIZE * (buff_num - 1) + num_read);
+	free(fd_list);
 	return word_map;
 }
 

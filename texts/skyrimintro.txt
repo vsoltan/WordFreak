@@ -17,7 +17,7 @@ Ralof: Watch your tongue! You're speaking to Ulfric Stormcloak, the true High
 King.
 
 Lokir: Ulfric? The Jarl of Windhelm? You're the leader of the rebellion. But if
-they captured you... Oh gods, where are they taking us?
+they captured you ... Oh gods, where are they taking us?
 
 Ralof: I don't know where we're going, but Sovngarde awaits.
 
@@ -29,7 +29,7 @@ Lokir: Why do you care?
 
 Ralof: A Nord's last thoughts shouldn't be of home.
 
-Lokir: Rorikstead. I'm...I'm from Rorikstead.
+Lokir: Rorikstead. I'm ... I'm from Rorikstead.
 
 Imperial Soldier: General Tullius, sir! The headsman is waiting!
 
@@ -42,7 +42,7 @@ the Thalmor are with him. Damn elves. I bet they had something to do
 with this.
 
 This is Helgen. I used to be sweet on a girl from here. Wonder if Vilod
-is still making that mead with juniper berries mixed in. Funny...when I
+is still making that mead with juniper berries mixed in. Funny ... when I
 was a boy, Imperial walls and towers used to make me feel so safe.
 
 Haming: Who are they, daddy? Where are they going?

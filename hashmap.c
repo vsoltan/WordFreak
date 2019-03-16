@@ -1,11 +1,5 @@
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include "hashmap.h"
-
-// increase HASH_SIZE to reduce collision in the dictionary
-// should be a prime number
 
 // accepts pointer to a hashmap and initializes the array
 // returns the pointer to the hashmap passed
@@ -73,8 +67,6 @@ HM_Entry *set_entry(Hashmap **hm, char *key) {
 			perror("malloc");
 			exit(EXIT_FAILURE);
 		}
-
-		// printf("space is not properly allocated!\n");
 		strcpy(new_entry->key, key);
 		// new_entry->key = key;
 		// printf("%s\n", new_entry->key);

@@ -191,7 +191,7 @@ void print_word_occ(Hashmap *map) {
 		if (curr != NULL) {
 			while (curr_next != NULL) {
 				char formatted_line[FORMATTED_LINE_LENGTH] = "";
-				sprintf(formatted_line, "%-30s  |  %6i\n", curr_next->key, curr_next->value);
+				sprintf(formatted_line, "%-30s|%10i\n", curr_next->key, curr_next->value);
 				write(STDOUT, formatted_line, FORMATTED_LINE_LENGTH);
 				curr_next = curr_next->next;
 			}

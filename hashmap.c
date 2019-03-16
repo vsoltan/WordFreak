@@ -21,7 +21,7 @@ Hashmap *init_hashmap() {
 
 HM_Entry *init_entry() {
 	HM_Entry *new_entry = (HM_Entry *) malloc(sizeof(HM_Entry));
-	new_entry->key = (char *) malloc(50); //MAX_WORD_SIZE
+	new_entry->key = (char *) malloc(50);                             //MAX_WORD_SIZE
 }
 
 // uses the hash algorithm djb2
@@ -40,16 +40,17 @@ unsigned long get_hash(char *key) {
 // returns a pointer to the that entry
 HM_Entry *get_entry(Hashmap *hm, char *key) {
 	// handles collision of keys in the hashmap TODO DOESN'T HANDLE COLLISIONS YET
-	for(HM_Entry *entry = hm->entries[get_hash(key)]; entry != NULL; entry = entry->next) {
+	HM_Entry *entry;
+	for(entry = hm->entries[get_hash(key)]; entry != NULL; entry = entry->next) {
 		// because short circuit evaluation does not exist
 		if (entry != NULL) {
-			if (strcmp(key , entry->key) == 0) {
+			if (strcmp(key, entry->key) == 0) {
 				return entry;
 			}
 		}
 	}
-	printf("entry does not exist [not an error]\n");
-	return NULL;
+	// printf("entry does not exist [not an error]\n");
+	return entry;
 }
 
 // enters the key and value into the dictionary,
@@ -69,15 +70,17 @@ HM_Entry *set_entry(Hashmap **hm, char *key) {
 			exit(EXIT_FAILURE);
 		}
 
-		printf("space is not properly allocated!\n");
+		// printf("space is not properly allocated!\n");
 		strcpy(new_entry->key, key);
 		// new_entry->key = key;
-		printf("%s\n", new_entry->key);
+		// printf("%s\n", new_entry->key);
 		// if entry is initialized for the first time, counter set to 1
 		new_entry->value = 1;
-
+		// this line is problematic:
+		HM_Entry *temp = (*hm)->entries[hash];
+		new_entry->next = temp;
 		(*hm)->entries[hash] = new_entry;
-		printf("entries[hash : %i] = %s\n", hash, (*hm)->entries[hash]->key);
+		// printf("entries[hash : %i] = %s\n", hash, (*hm)->entries[hash]->key);
 		entry = new_entry;
 	} else {
 		// if entry already exists, then free the old value so it can be updated

@@ -128,14 +128,18 @@ Hashmap *parse_string(char *text) {
 // prints out all the words in the read files and their occurences
 void print_word_occ(Hashmap *map) {
 	// for (int i  = 0; i < 2; ++i) {
-	// 	char formatted_line[80] = "";
-	// 	// sprintf()
-	// 	// write(STDOUT, get_entry(), strlen(get_entry(map, i)));
-	for (int i = 0; i < HASH; ++i) {
+	//  char formatted_line[80] = "";
+	//  // sprintf()
+	//  // write(STDOUT, get_entry(), strlen(get_entry(map, i)));
+	for (int i = 0; i < HASH_SIZE; ++i) {
 		HM_Entry *curr = map->entries[i];
+		HM_Entry *curr_next = curr;
 		if (curr != NULL) {
-			printf("is this scuffed\n");
-			printf("%20s  |  %2i\n", curr->key, curr->value);
+			while (curr_next != NULL) {
+				// printf("is this scuffed\n");
+				printf("%-10s  |  %2i\n", curr_next->key, curr_next->value);
+				curr_next = curr_next->next;
+			}
 			// printf("%20s\n", curr->key);
 		}
 	}

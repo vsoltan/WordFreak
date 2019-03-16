@@ -13,7 +13,7 @@
 #define MAX_WORD_SIZE 50
 #define STDOUT 1
 #define NO_FILE_OPENED -1
-#define FORMATTED_LINE_LENGTH 41
+#define FORMATTED_LINE_LENGTH 42
 // checks if the passed char is not a whitespace (space, tab, enter, etc)
 #define IS_WHITESPACE(c) c == ' ' || c == '\n' || c == '\t' || c == '\v' || c == '\f' || c == '\r'
 // checks if the passed char is alphanumeric
@@ -191,7 +191,7 @@ void print_word_occ(Hashmap *map) {
 		if (curr != NULL) {
 			while (curr_next != NULL) {
 				char formatted_line[FORMATTED_LINE_LENGTH] = "";
-				sprintf(formatted_line, "%-30s  |  %5i\n", curr_next->key, curr_next->value);
+				sprintf(formatted_line, "%-30s  |  %6i\n", curr_next->key, curr_next->value);
 				write(STDOUT, formatted_line, FORMATTED_LINE_LENGTH);
 				curr_next = curr_next->next;
 			}

@@ -11,7 +11,7 @@
 #define PATH "./texts/"
 #define BUFF_SIZE 16384
 #define MAX_WORD_SIZE 50
-#define HASH 101
+#define STDOUT 1
 #define NO_FILE_OPENED -1
 // checks if the passed char is not a whitespace (space, tab, enter, etc)
 #define IS_WHITESPACE(c) c == ' ' || c == '\n' || c == '\t' || c == '\v' || c == '\f' || c == '\r'
@@ -127,20 +127,17 @@ Hashmap *parse_string(char *text) {
 
 // prints out all the words in the read files and their occurences
 void print_word_occ(Hashmap *map) {
-	// for (int i  = 0; i < 2; ++i) {
-	//  char formatted_line[80] = "";
-	//  // sprintf()
-	//  // write(STDOUT, get_entry(), strlen(get_entry(map, i)));
 	for (int i = 0; i < HASH_SIZE; ++i) {
 		HM_Entry *curr = map->entries[i];
 		HM_Entry *curr_next = curr;
+
 		if (curr != NULL) {
 			while (curr_next != NULL) {
-				// printf("is this scuffed\n");
-				printf("%-10s  |  %2i\n", curr_next->key, curr_next->value);
+				char formatted_line[40] = "";
+				sprintf(formatted_line, "%-30s  |  %4i\n", curr_next->key, curr_next->value);
+				write(STDOUT, formatted_line, 40);
 				curr_next = curr_next->next;
 			}
-			// printf("%20s\n", curr->key);
 		}
 	}
 }

@@ -49,16 +49,15 @@ After handling the user input, we read the specified files in blocks of
     to process the file until the end is reached.
 
 After a word is parsed, it is put into a hashmap struct that we implemented.
-    (excluding the hashing algorithm). The hashing algorithm we implemented is
-    djb2 by Dan Bernstein. A hash value is generated for every word that is
-    encountered in the text files. The entry containing each word, along with
-    its occurrences, can be retrieved by passing the word to the hashmap through
-    our method get_entry(), which searches the hashed index as well as its
-    connections to find the specified word. Because the size of the hashmap is
-    predefined and finite, there are going to be certain words that hash to the same value,
-    resulting in collisions. This is handled by making each entry a node in a
-    linked list of entries; therefore, when a collision inevitably occurs, the word
-    is just added to the corresponding linked list using front insertion.
+    (excluding the hashing algorithm: djb2 by Dan Bernstein). A hash value is
+    generated for every word that is encountered in the text files. The entry 
+    containing each word, along with its occurrences, can be retrieved by passing
+    the word to the hashmap through our method get_entry(), which searches the hashed 
+    index as well as its connections to find the specified word. Because the size of 
+    the hashmap is predefined and finite, there are going to be certain words that hash 
+    to the same value, resulting in collisions. This is handled by making each entry a 
+    node in a linked list of entries; therefore, when a collision inevitably occurs, the 
+    word is just added to the corresponding linked list using front insertion.
 
 Once all the files are processed (the words and their occurrences occupying the hashmap),
     the method print_frequency() iterates through the hashmap and its buckets, formatting

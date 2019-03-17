@@ -14,7 +14,7 @@ Hashmap *init_hashmap() {
 	// dynamically allocates space for the hashmap
 	Hashmap *map = malloc(sizeof(Hashmap));
 	// checks that malloc was completed successfully
-	if(map == NULL) {
+	if(map == MEM_ALLOC_FAIL) {
 		perror("malloc");
 		exit(EXIT_FAILURE);
 	}
@@ -49,14 +49,14 @@ void free_hashmap(Hashmap **map) {
 HM_Entry *init_entry() {
 	HM_Entry *new_entry = (HM_Entry *) malloc(sizeof(HM_Entry));
 	// checks that malloc was completed successfully
-	if (new_entry == NULL) {
+	if (new_entry == MEM_ALLOC_FAIL) {
 		perror("malloc");
 		exit(EXIT_FAILURE);
 	}
 	// allocates space for the key field
 	new_entry->key = (char *) malloc(MAX_WORD_SIZE);
 	// checks that malloc was completed successfully
-	if (new_entry->key == NULL) {
+	if (new_entry->key == MEM_ALLOC_FAIL) {
 		perror("malloc");
 		exit(EXIT_FAILURE);
 	}

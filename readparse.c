@@ -42,11 +42,16 @@ Hashmap *read_parse(int num_files, int *fd_list) {
 	// iterates over each file
 	for (int cur_file = 0; cur_file < num_files; ++buff_num) {
 		num_read = read(fd_list[cur_file], buffer, BUFF_SIZE);
+		// if read is unsuccessful
+		if (num_read == NO_FILE_READ) {
+			perror("read");
+			exit(EXIT_FAILURE);
+		}
 		// if the number of chars read is less than BUFF_SIZE then read() reached the EOF
 		if (num_read < BUFF_SIZE) {
 			int cf = close(fd_list[cur_file]);
 			// confirm that there were no errors closing the file
-			if (cf == -1) {
+			if (cf == CLOSE_FAILED) {
 				perror("close");
 				exit(EXIT_FAILURE);
 			}

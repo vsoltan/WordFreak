@@ -76,36 +76,31 @@ int *process_input(int argc, char *argv[], int *num_files) {
 	// array containing all read file descriptors
 	// TODO free return_val in main - done
 	int *fd_list;
+	char *word_freak = getenv("WORD_FREAK");
+	char buffer[BUFF_SIZE];
 
-	 // ENVIRONMENTAL VARIABLE
-	 if (getenv("WORD_FREAK")) {
-		 printf("it exists!\n"); // TODO remove printf
-	 } else if(input_piping()) {
-		 // PIPING
-		 fd_list = malloc(sizeof(int));
-		 if (fd_list == NULL) {
-			 perror("malloc");
-			 exit(EXIT_FAILURE);
-		 }
-		 // gets the fd of standard in and puts it in the list
-		 fd_list[0] = STDIN_FILENO;
-		 *num_files = 1;
-	 } else {
-		 // CMD ARGUMENTS (Default case)
-		 fd_list = malloc(sizeof(int) * (argc - 1));
-		 // checking that malloc worked
-		 if (fd_list == NULL) {
-			 perror("malloc");
-			 exit(EXIT_FAILURE);
-		 }
-
-		 // gets all the fd from the files in the cmd line args and adds them to the list
-		 fd_list = open_files(argc - 1, argv + 1);
-		 *num_files = argc - 1;
-		 // null checking
-		 if(fd_list == NULL) {
-			 exit(EXIT_FAILURE);
-		 }
+	// ENVIRONMENTAL VARIABLE
+	if (word_freak != NULL) {
+		fd_list = open_files((*num_files = 1), &word_freak);
+	} else if (argc > 1) {
+		// CMD ARGUMENTS (Default case)
+		// gets all the fd from the files in the cmd line args and adds them to the list
+		fd_list = open_files(argc - 1, argv + 1);
+		*num_files = argc - 1;
+		// null checking
+		if(fd_list == NULL) {
+			exit(EXIT_FAILURE);
+		}
+	}
+	// standard input read
+	else if (argc == 1) {
+		fd_list = malloc(sizeof(int));
+		if (fd_list == NULL) {
+			perror("malloc");
+			exit(EXIT_FAILURE);
+		}
+		fd_list[0] = STDIN_FILENO;
+		*num_files = 1;
 	}
 	return fd_list;
 }

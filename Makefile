@@ -9,6 +9,6 @@ $(PROG): $(OBJ)
 $(OBJ): $(SRC)
 
 # dependencies
-main.o: readparse.h
-hashmap.o: hashmap.h
-readparse.o: readparse.h
+main.o: readparse.h dependencies.h
+hashmap.o: hashmap.h dependencies.h
+readparse.o: readparse.h dependencies.h

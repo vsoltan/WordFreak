@@ -2,24 +2,30 @@
 #include "readparse.h"
 
 /*
- * function:
- * --------------------------
- * returns :
- * type	   : 
+ * function: open_files
+ * --------------------
+ * dynamically allocates an array to hold the file descriptors
+ *      of the passed files contained in file_names
+ *
+ * returns : an array of all opened file descriptors
+ * type	   : (int *)
  */
 
-// takes an array file names, and the number of files and opens those files in the directory specified by the constant PATH
-// returns an array containing the file descriptors for every file specified
 int *open_files(int num, char **file_names) {
 	// list of the file descriptors
 	int *fd_list = calloc(num, sizeof(int));
+	// checks that calloc was completed successfully
 	if (fd_list == NULL) {
+		// prints out the corresponding error message
 		perror("calloc");
 		exit(EXIT_FAILURE);
 	}
+	// iterates through all the files
 	for (int i = 0; i < num; ++i) {
 		char file_path[256] = PATH;
+		// copies the file path into the array of file names
 		strcat(file_path, file_names[i]);
+		// attempts to open the file, if successful, appends its file descriptor to fd_list
 		if ((fd_list[i] = open(file_path, O_RDONLY)) == NO_FILE_OPENED) {
 			perror("open");
 			return NULL;
@@ -28,16 +34,21 @@ int *open_files(int num, char **file_names) {
 	return fd_list;
 }
 
-// combines the functionality of read() and parse()
-// allows the program to work with larger files by reading a file in multiple portions so that the buffer doesn't have to be ridiculously large
-// prints out all the words and their occurences in the processed files
-void print_word_occ(Hashmap **map) {
+/*
+ * function: print_frequency
+ * ------------------------
+ * iterates through the hashmap and prints out all the words and their occurences in the processed files
+ * returns : void
+ */
+
+void print_frequency(Hashmap **map) {
 	for (int i = 0; i < HASH_SIZE; ++i) {
 		HM_Entry *curr = (*map)->entries[i];
 		HM_Entry *curr_next = curr;
-
+		// do we need this if statement?
 		if (curr != NULL) {
 			while (curr_next != NULL) {
+				// format the information and write it to STDOUT
 				char formatted_line[FORMATTED_LINE_LENGTH] = "";
 				sprintf(formatted_line, "%-50s|%10i\n", curr_next->key, curr_next->value);
 				write(STDOUT, formatted_line, FORMATTED_LINE_LENGTH);
@@ -45,31 +56,11 @@ void print_word_occ(Hashmap **map) {
 			}
 		}
 	}
+	// we are done with the hashmap so free it
 	free_hashmap(map);
 }
 
-// checks if we have to process input through piping from stdin
-bool input_piping() {
-	// initializes input by adding the fd for stdin to a fd_set
-	fd_set readfds;
-	FD_ZERO(&readfds);
-	FD_SET(STDIN_FILENO, &readfds);
-
-	// we only want to see if we are already able to read from stdin
-	// so we set it to timeout after 0 seconds
-	struct timeval timeout;
-	timeout.tv_sec = 0;
-	timeout.tv_usec = 0;
-
-	//gets the number of fds that are ready to be read from
-	int select_returnval = select(1, &readfds, NULL, NULL, &timeout);
-
-	// if there are files set to be read, and stdin is one of those files, we are ready for piping
-	return select_returnval > 0 && FD_ISSET(STDIN_FILENO, &readfds) != 0;
-}
-
 // take the cmd parameters from main()
-// returns an array of file descriptors
 int *process_input(int argc, char *argv[], int *num_files) {
 	// array containing all read file descriptors
 	// TODO free return_val in main - done
@@ -108,6 +99,14 @@ int *process_input(int argc, char *argv[], int *num_files) {
 	return fd_list;
 }
 
+/*
+ * function: run_word_freak
+ * ------------------------
+ *
+ * returns : 0
+ * type	   : int
+ */
+
 int run_word_freak(int argc, char *argv[]) {
 	int *fd_list;
 	char *all_text;
@@ -118,10 +117,19 @@ int run_word_freak(int argc, char *argv[]) {
 
 	// reads and parses the text in the passed files
 	Hashmap *hm = read_parse(num_files, fd_list);
-	print_word_occ(&hm);
+	print_frequency(&hm);
 	return 0;
 }
 
+/*
+ * function: main
+ * --------------
+ * calls run_word_freak
+ *
+ * returns : 0
+ * type	   : int
+ */
 int main(int argc, char *argv[]) {
 	run_word_freak(argc, argv);
+	return 0;
 }

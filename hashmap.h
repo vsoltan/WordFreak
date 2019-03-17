@@ -1,3 +1,4 @@
+
 // provides access to all required libraries, macros, and vars
 #include "dependencies.h"
 
@@ -8,7 +9,7 @@
  *
  * next structure allows for linked lists of entries
  *		and bucketing (collision) support: if two different keys
- * 		hash to the same value, appended to the corresponding list
+ *      hash to the same value, appended to the corresponding list
  *
  * key in this context is a word that is read inside of a file
  *
@@ -33,15 +34,15 @@ typedef struct hashmap {
 	HM_Entry *entries[HASH_SIZE];
 } Hashmap;
 
-Hashmap *init_hashmap();
-
+// methods to free memory once parsing is complete
 void free_hashmap(Hashmap **hm);
+
+void free_entry(HM_Entry **entry);
 
 // constructors
 HM_Entry *init_entry();
 
-// frees the entry
-void free_entry(HM_Entry **entry);
+Hashmap *init_hashmap();
 
 // calculates the hash value of a provided string using RS Hash
 unsigned long get_hash(char *c);

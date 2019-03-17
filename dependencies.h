@@ -4,13 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-// wrapper functions for system calls
-#include <sys/stat.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <sys/select.h>
-
-// file and string manipulations
+// file control and string manipulations
 #include <fcntl.h>
 #include <string.h>
 

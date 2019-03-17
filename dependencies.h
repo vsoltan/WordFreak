@@ -23,8 +23,20 @@
 // standard output
 #define STDOUT 1
 
-// more intuitive descriptor for when read() fails
+// more intuitive descriptor for IO system calls / memory allocation
 #define NO_FILE_OPENED -1
+
+#define NO_FILE_READ -1
+
+#define NO_FILE_WRITE -1
+
+#define CLOSE_FAILED -1
+
+// file descriptor array was not initialized successfully
+#define FILE_DESC_EMPTY NULL
+
+// malloc or calloc failed
+#define MEM_ALLOC_FAIL NULL
 
 // standardized length for each printout of the hashmap
 #define FORMATTED_LINE_LENGTH 62

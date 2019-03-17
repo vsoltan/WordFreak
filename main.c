@@ -1,16 +1,15 @@
 
-// #include "hashmap.h"
 #include "readparse.h"
 
-// checks if the passed char is not a whitespace (space, tab, enter, etc)
-#define IS_WHITESPACE(c) c == ' ' || c == '\n' || c == '\t' || c == '\v' || c == '\f' || c == '\r'
-// checks if the passed char is alphanumeric
-#define IS_ALPHANUMERIC(c) 'a' <= c && c <= 'z' || 'A' <= c && c <= 'Z' || c == '\'' || '0' <= c && c <= '9'
+/*
+ * function:
+ * --------------------------
+ * returns :
+ * type	   : 
+ */
 
 // takes an array file names, and the number of files and opens those files in the directory specified by the constant PATH
 // returns an array containing the file descriptors for every file specified
-
-
 int *open_files(int num, char **file_names) {
 	// list of the file descriptors
 	int *fd_list = calloc(num, sizeof(int));
@@ -44,7 +43,6 @@ void print_word_occ(Hashmap **map) {
 				write(STDOUT, formatted_line, FORMATTED_LINE_LENGTH);
 				curr_next = curr_next->next;
 			}
-			// free_entry(&curr);
 		}
 	}
 	free_hashmap(map);
@@ -82,6 +80,11 @@ int *process_input(int argc, char *argv[], int *num_files) {
 	// ENVIRONMENTAL VARIABLE
 	if (word_freak != NULL) {
 		fd_list = open_files((*num_files = 1), &word_freak);
+		// if the file "word_freak" doesn't exist
+		if (fd_list == NULL) {
+			exit(EXIT_FAILURE);
+		}
+
 	} else if (argc > 1) {
 		// CMD ARGUMENTS (Default case)
 		// gets all the fd from the files in the cmd line args and adds them to the list

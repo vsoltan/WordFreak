@@ -1,12 +1,14 @@
 
-SRC  = main.c hashmap.c
-OBJ  = main.o hashmap.o
+SRC  = main.c hashmap.c readparse.c
+OBJ  = main.o hashmap.o readparse.o
 PROG = wordfreak
 
 $(PROG): $(OBJ)
 	gcc $(OBJ) -o $(PROG)
 
 $(OBJ): $(SRC)
-main.o: dependencies.h
-main.o: hashmap.h
+
+# dependencies
+main.o: readparse.h
 hashmap.o: hashmap.h
+readparse.o: readparse.h

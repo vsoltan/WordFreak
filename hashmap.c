@@ -1,25 +1,57 @@
 
-#include "hashmap.h"
+# include "hashmap.h"
 
 // accepts pointer to a hashmap and initializes the array
 // returns the pointer to the hashmap passed
 
 Hashmap *init_hashmap() {
-	Hashmap *hm = malloc(sizeof(Hashmap));
-	if(hm == NULL) {
+	Hashmap *map = malloc(sizeof(Hashmap));
+	if(map == NULL) {
 		perror("malloc");
 		exit(EXIT_FAILURE);
 	}
 	// initialize the entries in the list of entries to NULL
 	for (int i  = 0; i < HASH_SIZE; ++i) {
-		hm->entries[i] = NULL;
+		map->entries[i] = NULL;
 	}
-	return hm;
+	return map;
+}
+
+void free_hashmap(Hashmap **map) {
+	for(int i = 0; i < HASH_SIZE; ++i) {
+		free_entry(&((*map)->entries[i]));
+	}
+	// frees the entire structure once all fields are returned to heap
+	free(*map);
+	*map = NULL;
 }
 
 HM_Entry *init_entry() {
 	HM_Entry *new_entry = (HM_Entry *) malloc(sizeof(HM_Entry));
-	new_entry->key = (char *) malloc(50);
+	// could not malloc
+	if (new_entry == NULL) {
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	new_entry->key = (char *) malloc(MAX_WORD_SIZE);
+	// could not malloc
+	if (new_entry->key == NULL) {
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	return new_entry;
+}
+
+void free_entry(HM_Entry **entry) {
+	// puts the freeing of the last entry at the top of the stack function linkage
+	if (*entry != NULL) {
+		free_entry(&(*entry)->next);
+	} else {
+		// frees the first entry in the list
+		free(*entry);
+		// dangling pointer
+		*entry = NULL;
+	}
 }
 
 // uses the hash algorithm djb2
@@ -54,7 +86,7 @@ HM_Entry *get_entry(Hashmap *hm, char *key) {
 // enters the key and value into the dictionary,
 // if the key doesn't exist, then create a new entry
 // if the key already exists, then replace it's current value with the passed value
-HM_Entry *set_entry(Hashmap **hm, char *key) {
+HM_Entry *increment_entry(Hashmap **hm, char *key) {
 	// NULL if empty
 	HM_Entry *entry = get_entry(*hm, key);
 	int hash = get_hash(key);
@@ -62,14 +94,8 @@ HM_Entry *set_entry(Hashmap **hm, char *key) {
 	if (entry == NULL) {
 		// then create a new entry
 		HM_Entry *new_entry = init_entry();
-		// could not malloc
-		if (new_entry == NULL) {
-			perror("malloc");
-			exit(EXIT_FAILURE);
-		}
 		strcpy(new_entry->key, key);
-		// new_entry->key = key;
-		// printf("%s\n", new_entry->key);
+
 		// if entry is initialized for the first time, counter set to 1
 		new_entry->value = 1;
 		// this line is problematic:

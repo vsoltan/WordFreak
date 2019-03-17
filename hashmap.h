@@ -33,10 +33,15 @@ typedef struct hashmap {
 	HM_Entry *entries[HASH_SIZE];
 } Hashmap;
 
+Hashmap *init_hashmap();
+
+void free_hashmap(Hashmap **hm);
+
 // constructors
 HM_Entry *init_entry();
 
-Hashmap *init_hashmap();
+// frees the entry
+void free_entry(HM_Entry **entry);
 
 // calculates the hash value of a provided string using RS Hash
 unsigned long get_hash(char *c);
@@ -45,4 +50,4 @@ unsigned long get_hash(char *c);
 HM_Entry *get_entry(Hashmap *hm, char *key);
 
 // enters the key and value into the Hashmap
-HM_Entry *set_entry(Hashmap **hm, char *key);
+HM_Entry *increment_entry(Hashmap **hm, char *key);

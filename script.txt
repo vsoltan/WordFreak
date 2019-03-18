@@ -1,0 +1,16 @@
+This is our demonstration of Project 3: WordFreak
+
+ - When we execute the program, we can provide input to the program in three ways
+    1) By using the bash piping operator, and reading from stdin
+    2) By reading from an environmental variable called "WORD_FREAK"
+    3) By passing arguments in the command line execution of the program
+
+ - The program gives the same result regardless of the method of input
+
+ - Our program primarily revolves around a hashmap struct which we implemented ourselves
+ - We parse the files in blocks of 16384 characters, and parse each block of charcters in order to prevent the char buffer from being obscenely large when reading multiple files, or particularly large files
+ - After reading, parsing and entering the block into the hashmap, we free all the allocated memory
+ - We defined a word as a continuous section of alphanumeric characters separated by white space characters
+    - Something to note is that we treat a single hyphen like it's an alphanumeric character, but a double hyphen is treated like a whitespace character
+ - After each word is parsed, we enter it into a hashmap and increment it's value by 1
+ - After every block is parsed, we write the contents of the hashmap to the terminal

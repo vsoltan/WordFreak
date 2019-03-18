@@ -46,7 +46,8 @@ After handling the user input, we read the specified files in blocks of
     separated by whitespace characters are considered to be a word. We do not
     differentiate words by their capitalization, so that "WORD", "word", "Word", and
     and "wORd", are all treated the same. The buffer is then reset and, continues
-    to process the file until the end is reached.
+    to process the file until the end is reached. We read and parse the files at the
+    same time for efficiency. 
 
 After a word is parsed, it is put into a hashmap struct that we implemented.
     (excluding the hashing algorithm: djb2 by Dan Bernstein). A hash value is

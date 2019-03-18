@@ -9,7 +9,7 @@ This is our demonstration of Project 3: WordFreak
 
  - Our program primarily revolves around a hashmap struct which we implemented ourselves
  - We parse the files in blocks of 16384 characters, and parse each block of charcters in order to prevent the char buffer from being obscenely large when reading multiple files, or particularly large files
- - After reading, parsing and entering the block into the hashmap, we free all the allocated memory
+ - After reading, parsing, entering the block into the hashmap, and printing out the contents, we free all the allocated memory
  - We defined a word as a continuous section of alphanumeric characters separated by white space characters
     - Something to note is that we treat a single hyphen like it's an alphanumeric character, but a double hyphen is treated like a whitespace character
  - After each word is parsed, we enter it into a hashmap and increment it's value by 1

@@ -81,8 +81,8 @@ void free_entry(HM_Entry **entry) {
  * function: get_hash
  * ------------------
  * gets the hash for the given key
- *		utilizes the hash algorithm djb2
- *		implementation: http://www.cse.yorku.ca/~oz/hash.html
+ *		utilizes the hash algorithm
+ *		djb2implementation: http://www.cse.yorku.ca/~oz/hash.html
  *
  * had to use unsigned keyword because value for hash was exceeding limit
  *
@@ -106,8 +106,8 @@ unsigned long get_hash(char *key) {
  * gets the entry in the hashmap that corresponds to the passed key
  *
  * checks if the hashed index contains a value, if not, proceeds
- *      to check the entries in the linked list, as to retrieve
- *      colliding entries
+ *		to check the entries in the linked list, as to retrieve
+ *		colliding entries
  *
  * returns : the pointer to the entry
  * type	   : (HM_Entry *)
@@ -128,8 +128,8 @@ HM_Entry *get_entry(Hashmap *map, char *key) {
  * function: increment_entry
  * -------------------------
  * attempts to increment the entry with the given key
- *      if the key doesn't exist, then it creates a new entry
- *      if the key already exists, then it increments the current value of that entry
+ *		if the key doesn't exist, then it creates a new entry
+ *		if the key already exists, then it increments the current value of that entry
  *
  * returns : the incremented entry
  * type	   : (HM_Entry *)

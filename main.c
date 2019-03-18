@@ -5,7 +5,7 @@
  * function: open_files
  * --------------------
  * dynamically allocates an array to hold the file descriptors
- *      of the passed files contained in file_names
+ *		of the passed files contained in file_names
  *
  * returns : an array of all opened file descriptors
  * type	   : (int *)
@@ -77,7 +77,7 @@ void print_frequency(Hashmap **map) {
  *
  * vars:
  *		fd_list		:  an array of file descriptors
- *		word_freak  :  the value corresponding to the WORD_FREAK environmental var
+ *		word_freak	:  the value corresponding to the WORD_FREAK environmental var
  *
  * returns : int *
  */

@@ -59,7 +59,7 @@ Hashmap *read_parse(int num_files, int *fd_list) {
 		}
 
 		/*
-		 * cur_char: the current character that we are looking at
+		 * cur_char	: the current character that we are looking at
 		 * word_char: the current character in the word that we are building
 		 */
 

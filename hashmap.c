@@ -82,7 +82,7 @@ void free_entry(HM_Entry **entry) {
  * ------------------
  * gets the hash for the given key
  *		utilizes the hash algorithm djb2
- *      implementation: http://www.cse.yorku.ca/~oz/hash.html
+ *		implementation: http://www.cse.yorku.ca/~oz/hash.html
  *
  * had to use unsigned keyword because value for hash was exceeding limit
  *

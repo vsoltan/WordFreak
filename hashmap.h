@@ -9,7 +9,7 @@
  *
  * next structure allows for linked lists of entries
  *		and bucketing (collision) support: if two different keys
- *      hash to the same value, appended to the corresponding list
+ *		hash to the same value, appended to the corresponding list
  *
  * key in this context is a word that is read inside of a file
  *

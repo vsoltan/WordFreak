@@ -38,7 +38,7 @@ int *open_files(int num, char **file_names) {
  * function: print_frequency
  * ------------------------
  * iterates through the hashmap and prints out a formatted list of
- * 		all the words and their occurences in the processed files
+ *		all the words and their occurences in the processed files
  *
  * returns : void
  */
@@ -73,14 +73,15 @@ void print_frequency(Hashmap **map) {
  * function: process_input
  * ------------------------
  * takes the various forms of users input and converts it into a list of
- * 		file descriptors that can be handeled elsewhere
+ *		file descriptors that can be handeled elsewhere
  *
  * vars:
  *		fd_list		:  an array of file descriptors
- * 		word_freak  :  the value corresponding to the WORD_FREAK environmental var
+ *		word_freak  :  the value corresponding to the WORD_FREAK environmental var
  *
  * returns : int *
  */
+
 int *process_input(int argc, char *argv[], int *num_files) {
 	// array containing all read file descriptors
 	int *fd_list;
@@ -126,7 +127,7 @@ int *process_input(int argc, char *argv[], int *num_files) {
  * function: run_word_freak
  * ------------------------
  * runs the program by getting the user input, reading and parsing the files
- * 		specified by the user, and writing the result to the console
+ *		specified by the user, and writing the result to the console
  *
  * vars:
  *		fd_list		:  list of all the file descriptors

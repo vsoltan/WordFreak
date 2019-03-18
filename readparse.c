@@ -17,12 +17,12 @@ static char to_lowercase(char c) {
  *		using increment_entry to increase its frequency count
  *
  * vars:
- *      buffer       : buffer used by read()
- *      word         : a buffer for building words
+ *		buffer       : buffer used by read()
+ *		word         : a buffer for building words
  *		hyphen_carry : used to differentiate between "-" and "--"
- *      num_read     : number of chars put into the buffer by read
- *	    total        : total number of chars read
- *	    buff_num     : the number of buffers that have been iterated through
+ *		num_read     : number of chars put into the buffer by read
+ *		total        : total number of chars read
+ *		buff_num     : the number of buffers that have been iterated through
  *		stunt        : used for determining if the char is the last one in the file
  *
  * returns : a hasmap that holds all words parsed and the amount of occurences

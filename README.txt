@@ -77,3 +77,10 @@ Requirements:
 10) Linux kernel API IO is used
 11) sprintf is used for formatting (main.c -> print_frequency)
 12) Error checking used to determine the success of system calls and malloc/calloc calls
+
+Video: 
+https://youtu.be/tY778yeSeCA
+
+Github Repository:
+https://github.com/brendonky18/WordFreak
+

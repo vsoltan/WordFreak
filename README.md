@@ -1,6 +1,6 @@
 Word Freak
 
-Contributors:
+Contributors
  - Brendon Ky
  - Deniz Guler
  - Valeriy Soltan

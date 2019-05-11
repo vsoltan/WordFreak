@@ -1,4 +1,4 @@
-Word Freak
+# Word Freak
 
 Contributors
  - Brendon Ky

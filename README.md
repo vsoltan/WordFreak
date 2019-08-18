@@ -40,7 +40,7 @@ The user can specify which text files should be parsed in 3
     3) through an environmental variable called WORD_FREAK
         $ WORD_FREAK=a.txt ./wordfreak
 
-After handling the user input, we read the specified files in blocks of
+Upon handling the user input, we read the specified files in blocks of
     16384 (2^14) characters. After a block of characters is read onto a
     buffer, it is parsed so that continuous sections of alphanumeric characters,
     separated by whitespace characters are considered to be a word. We do not

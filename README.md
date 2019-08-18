@@ -1,4 +1,4 @@
-# Word Freak
+# WordIndex
 
 Contributors
  - Brendon Ky
@@ -63,24 +63,4 @@ After a word is parsed, it is put into a hashmap struct that we implemented.
 Once all the files are processed (the words and their occurrences occupying the hashmap),
     the method print_frequency() iterates through the hashmap and its buckets, formatting
     a combination of the word | frequency, and printing them out in the console.
-
-Requirements:
-1)  Makefile is included, handling the interdependence of the files in our implementation
-2)  Source and headers are supplied as specified (see above for rundown of the files and their functions)
-3)  Modularity in design, comments throughout the implementation, and proper indentation
-4)  README.txt supplied
-5)  Program handles a variety of inputs (as shown above)
-6)  Environmental variable support is included
-7)  Hashmap and its entries (HM_Entry) are dynamically allocated (and freed) to accommodate different file sizes
-8)  Structures and used to represent hashmap and its entries
-9)  Pointers are passed to functions, modified, and used extensively throughout the implementation
-10) Linux kernel API IO is used
-11) sprintf is used for formatting (main.c -> print_frequency)
-12) Error checking used to determine the success of system calls and malloc/calloc calls
-
-Video: 
-https://youtu.be/tY778yeSeCA
-
-Github Repository:
-https://github.com/brendonky18/WordFreak
-
+    
